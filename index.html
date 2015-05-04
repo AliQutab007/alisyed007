@@ -1,188 +1,300 @@
-import java.awt.*;
-import java.applet.*;
 
-@SuppressWarnings("serial")
-public class LineArt extends Applet 
+
+<!DOCTYPE hmtl>
+
+<html>
+
+<head>
+
+
+
+<style> 
+
+.redTextClass
 {
-	public void paint(Graphics g)
-	{
-		int width = 720;
-		int height = 640;
-		int offsetX = 10;
-		int offsetY = 10;
-		int numBoxes = 5;
-		int maxNumberOfLinesToUseFromOneSide = 50;
-		this.setSize(width+offsetX * 2,height + offsetY * 2);
-		this.setName("Sanjay Ganeshan - Lineception");
-		g.setColor(new Color(20,20,20));
-		g.fillRect(0, 0, width + offsetX * 2, height + offsetY * 2);
-		g.setColor(new Color(255,0,0));
-		g.drawRect(offsetX,offsetY,width,height);
-		Object[] res;
-		int colorphase = 1;
-		Color colorToPass = new Color(255,0,0);
-		
-		/*
-		 * ORIGINAL DRAWING CODE WITHOUT FOR LOOP FOR BOXES
-		 * */
-		
-		/*
-		res = drawDesign(g,offsetX,offsetY,width,height,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
-		colorToPass = (Color)(res[0]);
-		g = (Graphics)(res[1]);
-		colorphase = (int)(res[2]);
-		res = drawDesign(g,offsetX+width/4,offsetY + height/4,width/2,height/2,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
-		colorToPass = (Color)(res[0]);
-		g = (Graphics)(res[1]);
-		colorphase = (int)(res[2]);
-		res = drawDesign(g,offsetX+width/4 + width / 8,offsetY + height/4 + height/8,width/4,height/4,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
-		colorToPass = (Color)(res[0]);
-		g = (Graphics)(res[1]);
-		colorphase = (int)(res[2]);
-		res = drawDesign(g,offsetX+width/4 + width / 8 + width/16,offsetY + height/4 + height/8 + height/16,width/8,height/8,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
-		*/
-		for(int i = 0; i < numBoxes;i++)
-		{
-			res = drawDesign(g,getOffset(i,offsetX,width),getOffset(i,offsetY,height),(int)(width / Math.pow(2.0,i)),(int)(height / Math.pow(2.0,i)),maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
-			colorToPass = (Color)(res[0]);
-			g = (Graphics)(res[1]);
-			colorphase = (Integer)(res[2]);
-		}
-	}
-	public int getOffset(int boxNum, int offsetX, int length)
-	{
-		if(boxNum == 0)
-			return offsetX;
-		int newOffset = offsetX + length / 4;
-		for(int i = 0; i < boxNum - 1; i++)
-		{
-			newOffset += (int)(length / Math.pow(2,i+3));
-		}
-		return newOffset;
-	}
-	public int GCF(int a, int b, int maxWanted)
-	{
-		for(int i = Math.min(maxWanted,Math.min(a, b)) + 1; i >1; i--)
-			if(a % i == 0 && b % i == 0)
-				return i;
-		return 1;
-	}
-	public Object[] drawDesign(Graphics g,int startingX, int startingY, int width, int height, int maxNumberOfLines,Color colorToUse,int colorphase)
-	{
-		//int colorphase = 1;
-		int numLines = GCF(width / 2, height / 2, maxNumberOfLines);
-		int deltaX = (width/2) / numLines;
-		int deltaY = (height/2) / numLines;
-		int midPointX = width / 2 + startingX;
-		int midPointY = height / 2 + startingY;
-		Object[] res;
-		for(int i = 0; i <= numLines; i++)
-		{
-			g.setColor(colorToUse);
-			g.drawLine(startingX,midPointY+deltaY*i, midPointX - deltaX*i, startingY);
-			
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-			
-			g.drawLine(startingX ,midPointY-deltaY*i, midPointX + deltaX*i, startingY);
-			
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-			//System.out.println(startingX + "  " + (midPointY+deltaY*i) + "   " + (midPointX - deltaX*i) +"  " + startingY);
-			g.drawLine(width+startingX,midPointY+deltaY*i, midPointX + deltaX*i, startingY);
-			
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-			
-			g.drawLine(width+startingX,midPointY-deltaY*i, midPointX - deltaX*i, startingY);
-
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-			
-			g.drawLine(startingX,midPointY+deltaY*i, midPointX + deltaX*i, height+startingY);
-
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-			
-			g.drawLine(startingX,midPointY-deltaY*i, midPointX - deltaX*i, height + startingY);
-
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-			
-			g.drawLine(width + startingX,midPointY+deltaY*i, midPointX - deltaX*i, height+startingY);
-
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-			
-			g.drawLine(width + startingX,midPointY-deltaY*i, midPointX + deltaX*i, height + startingY);
-
-			res = changeColor(colorToUse,colorphase,g);
-			colorToUse = (Color)(res[0]);
-			colorphase = (Integer)(res[1]);
-			g = (Graphics)(res[2]);
-		}
-		return new Object[]{colorToUse,g,colorphase};
-	}
-	public Object[] changeColor(Color colorToUse, int colorphase, Graphics g)
-	{
-		int pos = 7;
-		int neg = -7;
-		switch(colorphase)
-		{
-		case 1:
-			colorToUse=updateColor(colorToUse,0,pos,0);
-			if(colorToUse.getGreen() >= 255)
-				colorphase = 2;
-			break;
-		case 2:
-			colorToUse=updateColor(colorToUse,neg,0,0);
-			if(colorToUse.getRed() <= 0)
-				colorphase = 3; 
-			break;
-		case 3:
-			colorToUse=updateColor(colorToUse,0,0,pos);
-			if(colorToUse.getBlue() >= 255)
-				colorphase = 4; 
-			break;
-		case 4:
-			colorToUse=updateColor(colorToUse,0,neg,0);
-			if(colorToUse.getGreen() <= 0)
-				colorphase = 5; 
-			break;
-		case 5:
-			colorToUse=updateColor(colorToUse,pos,0,0);
-			if(colorToUse.getRed() >= 255)
-				colorphase = 6; 
-			break;
-		case 6:
-			colorToUse=updateColor(colorToUse,0,0,neg);
-			if(colorToUse.getBlue() <= 0)
-				colorphase = 1; 
-			break;
-		}
-		g.setColor(colorToUse);
-		return new Object[]{colorToUse,colorphase,g};
-	}
-	public Color updateColor(Color c, int rInc, int gInc, int bInc)
-	{
-		return new Color(bounds(0,c.getRed()+rInc,255),bounds(0,c.getGreen()+gInc,255),bounds(0,c.getBlue()+bInc,255));
-	}
-	private int bounds(int lower, int num, int upper) {
-		return Math.max(lower, Math.min(num, upper));
-	}
-	
+	color : red;
 }
+
+.greenTextClass
+{
+	color : green;
+}
+
+.blueTextClass
+{
+	color : blue;
+}
+
+.codeDivClass
+{
+	display    : none;
+	background : rgb(255, 255, 128);
+	border     : medium gray solid;
+	padding    : 8px;
+}
+
+.codeTextareaClass
+{
+	background-color : aqua;
+	font-size        : large;
+	width            : 95%;
+	height           : 200px;
+}
+
+</style>
+
+
+<title>Quadratic Solver | Zona Land Education</title>
+
+</head>
+
+<body onload="evaluateCode();">
+
+<!-- centering div's -->
+<div id="zle_centering1DivId">
+<div id="zle_centering2DivId">
+<div id="zle_centering3DivId">
+
+
+
+
+	<h1>Ali's Quadratic Solver</h1>
+
+		
+    <br>
+    
+    <p><span class="topicSentence">Calculator for the quadratic equation:</span></p>
+    
+	<p class="xLarge">0 = <span class="redTextClass">a</span>x<sup>2</sup> + 
+	<span class="greenTextClass">b</span>x + <span class="blueTextClass">c</span></p>
+    
+    <table border="0" cellpadding="4">
+        <tr>
+            <td><span class="xLarge"><span class="redTextClass">a</span> =</span> </td>
+            <td>
+            <form name="aForm">
+                <p><input type="text" size="10" name="aField" value="0"></p>
+            </form>
+            </td>
+            <td><span class="xLarge"><span class="greenTextClass">b</span> =</span> </td>
+            <td><form name="bForm">
+                <p><input type="text" size="10" name="bField" value="0"></p>
+            </form>
+            </td>
+            <td><span class="xLarge"><span class="blueTextClass">c</span> =</span> </td>
+            <td><form name="cForm">
+                <p><input type="text" size="10" name="cField" value="0"></p>
+            </form>
+            </td>
+        </tr>
+    </table>
+    
+    <form>
+        <p><input type="button" name="calculateButton" value="Calculate" onclick="calculate();"></p>
+    </form>
+    
+    <p>&nbsp;</p>
+    
+	<p><span class="topicSentence">The above program will calculate solutions to the quadratic equation.</span></p>
+    
+    <div class="indent">
+        <ul>
+            <li class="hasBottomMargin">Enter values for
+                the coefficients <em><strong>a</strong></em>, <em><strong>b</strong></em>,
+                and <em><strong>c</strong></em>.</li>
+            <li class="hasBottomMargin">Click the '<strong>Calculate</strong>'
+                button.</li>
+            <li class="hasBottomMargin">The roots of the
+                quadratic equation will pop up.</li>
+        </ul>
+    </div>
+
+    <p>&nbsp;</p>
+    
+	<p class="topicSentence">These values for <em><strong>x</strong></em>
+    are calculated using the solution to the quadratic equation,
+    which is:</p>
+    
+    <p><img src="qesol0.gif" width="249" height="82"></p>
+    
+    <p>&nbsp;</p>
+    
+	<p>
+	<a class="textNavigationLink topicSentence" href="../quadraticFormula/quadraticFormula.html">
+	The derivation of the above equation is available here.</a></p>
+	
+	<p>&nbsp;</p>
+	
+	<p><span class="topicSentence">Of course, the coefficient <em><strong>'a'</strong></em>
+    must be non-zero for this to be a quadratic equation.</span>
+    Solutions are only calculated when <em><strong>a</strong></em>
+    is non-zero.</p>
+    
+	<p>&nbsp;</p>
+
+<p class="topicSentence">
+Click this button to see the actual JavaScript code that executes on this page:</p>
+
+<p>
+<input id="codeButtonId" type="button" value="Code"></p>
+  
+<div id="codeDivId" class="codeDivClass">
+
+<p>Here's the code that runs when you click the above <strong><em>'Calculate'</em></strong> button. 
+It is shown here as a possible aid for your study and understanding.</p>
+	<p>You can change the code, if you like, and then click the following 
+	<strong><em>'Reevaluate code'</em></strong> button.
+	The program will then work as per your changes when you click the <strong><em>'Calculate'</em></strong> button 
+	on the above <strong><em>Quadratic Solver</em></strong>.
+	Of course, your changes, especially random changes, can introduce <strong><em>
+	errors</em></strong>, <strong><em>miscalculations</em></strong>, and <strong>
+	<em>browser crashes</em></strong>. If you 
+	need to get things back to their original condition, just <strong><em>reload</em></strong> 
+	this page using your browser's reload button.</p>
+	<p>Again, the intention here is to conveniently show you the inner workings 
+	of this program so that you understand how the program arrives at the 
+	result. Click the <strong><em>'Code'</em></strong> button again to close this section.</p>
+
+<p><input type="button" value="Reevaluate code" onclick="evaluateCode();"></p>
+
+<textarea id="codeTextareaId" class="codeTextareaClass">window.calculate = function()
+{
+	// Variables.
+	var a             = 0.0;
+	var b             = 0.0;
+	var c             = 0.0;	
+	var discriminant  = 0.0;
+	var x1            = 0.0;
+	var x2            = 0.0;
+	var realPart      = 0.0;
+	var imaginaryPart = 0.0;
+
+	// Get values for a, b, and c.
+	a = parseFloat(window.document.aForm.aField.value);
+	b = parseFloat(window.document.bForm.bField.value);
+	c = parseFloat(window.document.cForm.cField.value);
+
+	// Is this a quadratic equation?
+	if(a == 0.0)
+	{
+		// No, this is not a quadratic equation because a equals zero.
+		
+		// Tell the world about it.
+		alert("Not a quadratic equation. The coefficient 'a' can not be zero.");
+	}
+	else
+	{
+		// Yes, this is a quadratic equation because a does not equal zero.
+		
+		// Calculate the discriminant.
+		discriminant = b*b - 4*a*c;
+
+		// Do we have complex conguate roots?
+		if(discriminant < 0.0)
+		{
+			// Yes, we have complex conguate roots.
+			realPart      = -b / (2 * a);
+			imaginaryPart = Math.sqrt(-discriminant) / (2 * a);			
+
+			// Tell the world about it.
+			alert("Discriminant = " + discriminant + "\n\nThe roots are complex conjugates.\n\nx1 = " + realPart + " + " + imaginaryPart + "i" + "\nx2 = " + realPart + " - " + imaginaryPart + "i");
+		}
+		// Or do we have one real root?
+		else if(discriminant == 0.0)
+		{
+			// Yes, we have one real root.
+			x1 = -b / (2 * a);
+		
+			// Tell the world about it.
+			alert("Discriminant = " + discriminant + "\n\nThere is only one real number root.\n\nx = " + x1);
+		}
+		// We must have two real roots.
+		else
+		{
+			// The real roots.
+			x1 = (-b + Math.sqrt(discriminant))/(2*a);
+			x2 = (-b - Math.sqrt(discriminant))/(2*a);
+
+			// Tell the world about it.
+			alert("Discriminant = " + discriminant + "\n\nThere are two real number roots.\n\nx1 = " + x1 + "\nx2 = " + x2);
+		}
+	}
+}
+</textarea>
+
+</div>
+
+    <br>
+    
+	<p>
+	<a class="navigationLink" href="javascript: history.back();">Back</a>
+	<a class="navigationLink" href="../miscellaneousMath.html">Miscellaneous Mathematics</a>
+	<a class="navigationLink" href="../../mmts.html">Mathematics</a>
+	<a class="navigationLink" href="../../../contents/contents.html">Contents</a>
+	<a class="navigationLink" href="../../../theIndex/theIndex.html">Index</a>
+	<a class="navigationLink" href="../../../index.html">Home</a>
+	</p>
+
+	<br>
+
+<!-- Start: Google Adsense white -->
+<div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4514422117037825";
+/* 728x90, top horizontal */
+google_ad_slot = "3363392667";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<!-- End: Google Adsense white -->
+
+<br>
+
+<div style="border:0px solid gray;padding:4px;margin-top:4px;">    
+<!-- Start: Google Adsense search white -->
+<style type="text/css"> 
+@import url(http://www.google.com/cse/api/branding.css);
+</style>
+<div class="cse-branding-bottom" style="background-color:#FFFFFF;color:#000000">
+  <div class="cse-branding-form">
+    <form action="http://www.google.com/cse" id="cse-search-box">
+      <div>
+        <input type="hidden" name="cx" value="partner-pub-4514422117037825:vljtw0fix4h" />
+        <input type="hidden" name="ie" value="ISO-8859-1" />
+        <input type="text" name="q" size="31" />
+        <input type="submit" name="sa" value="Search" />
+      </div>
+    </form>
+  </div>
+  <div class="cse-branding-logo">
+    <img src="http://www.google.com/images/poweredby_transparent/poweredby_FFFFFF.gif" alt="Google" />
+  </div>
+  <div class="cse-branding-text">
+    Custom Search
+  </div>
+</div>
+<!-- End: Google Adsense search white -->
+</div>
+
+<br>
+
+<iframe class="footerIFrameClass" src="/iframe/footer/footer.html" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" width="100%">
+This browser does not support inline frames, or it is currently configured not to display inline frames.
+</iframe>
+
+<div id="zle_pageBottomSpacerId">
+</div>
+
+<!-- centering div's -->
+</div>
+</div>
+</div>
+
+</body>
+
+</html>
+
