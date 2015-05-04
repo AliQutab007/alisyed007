@@ -1,43 +1,188 @@
-<!DOCTYPE HTML>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <link href="styles.css" rel="stylesheet">
-    <title>BrikBrok - my brick breaker HTML 5</title>
-</head>
-<body>
-    <div class="grid">
-        <header>
-            <h1>
-                BrikBrok</h1>
-            <ul>
-                <li><a href="#gameZone" id="newGame">New game</a></li>
-                <li><a href="#gameZone" id="wormHole">Wormhole Mode</a></li>
-            </ul>
-        </header>
-        <div id="gameZone">
-            <canvas id="backgroundCanvas">
-                Your browser doesn't support HTML5. Please install Internet Explorer 9 :
-                <br />
-                <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie9_bow_Bing&WT.srch=1&mtag=SearBing">
-                    http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie9_bow_Bing&WT.srch=1&mtag=SearBing</a>
-            </canvas>
-            <svg id="svgRoot">
-                <circle cx="100" cy="100" r="10" id="ball" />
-                <rect id="pad" height="15px" width="150px" x="200" y="200" rx="10" ry="20"/>
-            </svg>
-            <div id="stats">
-            </div>
-            <div id="message">Victory!</div>
-        </div>
-        <footer>
-            <ul>
-                <li><a href="http://blogs.msdn.com/eternalcoding">Blog David Catuhe</a></li>
-            </ul>
-        </footer>
-    </div>
-    <script type="text/javascript" src="mouse.js"></script>
-    <script type="text/javascript" src="background.js"></script>
-    <script type="text/javascript" src="game.js"></script>
-</body>
-</html>
+import java.awt.*;
+import java.applet.*;
+
+@SuppressWarnings("serial")
+public class LineArt extends Applet 
+{
+	public void paint(Graphics g)
+	{
+		int width = 720;
+		int height = 640;
+		int offsetX = 10;
+		int offsetY = 10;
+		int numBoxes = 5;
+		int maxNumberOfLinesToUseFromOneSide = 50;
+		this.setSize(width+offsetX * 2,height + offsetY * 2);
+		this.setName("Sanjay Ganeshan - Lineception");
+		g.setColor(new Color(20,20,20));
+		g.fillRect(0, 0, width + offsetX * 2, height + offsetY * 2);
+		g.setColor(new Color(255,0,0));
+		g.drawRect(offsetX,offsetY,width,height);
+		Object[] res;
+		int colorphase = 1;
+		Color colorToPass = new Color(255,0,0);
+		
+		/*
+		 * ORIGINAL DRAWING CODE WITHOUT FOR LOOP FOR BOXES
+		 * */
+		
+		/*
+		res = drawDesign(g,offsetX,offsetY,width,height,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
+		colorToPass = (Color)(res[0]);
+		g = (Graphics)(res[1]);
+		colorphase = (int)(res[2]);
+		res = drawDesign(g,offsetX+width/4,offsetY + height/4,width/2,height/2,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
+		colorToPass = (Color)(res[0]);
+		g = (Graphics)(res[1]);
+		colorphase = (int)(res[2]);
+		res = drawDesign(g,offsetX+width/4 + width / 8,offsetY + height/4 + height/8,width/4,height/4,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
+		colorToPass = (Color)(res[0]);
+		g = (Graphics)(res[1]);
+		colorphase = (int)(res[2]);
+		res = drawDesign(g,offsetX+width/4 + width / 8 + width/16,offsetY + height/4 + height/8 + height/16,width/8,height/8,maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
+		*/
+		for(int i = 0; i < numBoxes;i++)
+		{
+			res = drawDesign(g,getOffset(i,offsetX,width),getOffset(i,offsetY,height),(int)(width / Math.pow(2.0,i)),(int)(height / Math.pow(2.0,i)),maxNumberOfLinesToUseFromOneSide / 2,colorToPass,colorphase);
+			colorToPass = (Color)(res[0]);
+			g = (Graphics)(res[1]);
+			colorphase = (Integer)(res[2]);
+		}
+	}
+	public int getOffset(int boxNum, int offsetX, int length)
+	{
+		if(boxNum == 0)
+			return offsetX;
+		int newOffset = offsetX + length / 4;
+		for(int i = 0; i < boxNum - 1; i++)
+		{
+			newOffset += (int)(length / Math.pow(2,i+3));
+		}
+		return newOffset;
+	}
+	public int GCF(int a, int b, int maxWanted)
+	{
+		for(int i = Math.min(maxWanted,Math.min(a, b)) + 1; i >1; i--)
+			if(a % i == 0 && b % i == 0)
+				return i;
+		return 1;
+	}
+	public Object[] drawDesign(Graphics g,int startingX, int startingY, int width, int height, int maxNumberOfLines,Color colorToUse,int colorphase)
+	{
+		//int colorphase = 1;
+		int numLines = GCF(width / 2, height / 2, maxNumberOfLines);
+		int deltaX = (width/2) / numLines;
+		int deltaY = (height/2) / numLines;
+		int midPointX = width / 2 + startingX;
+		int midPointY = height / 2 + startingY;
+		Object[] res;
+		for(int i = 0; i <= numLines; i++)
+		{
+			g.setColor(colorToUse);
+			g.drawLine(startingX,midPointY+deltaY*i, midPointX - deltaX*i, startingY);
+			
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+			
+			g.drawLine(startingX ,midPointY-deltaY*i, midPointX + deltaX*i, startingY);
+			
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+			//System.out.println(startingX + "  " + (midPointY+deltaY*i) + "   " + (midPointX - deltaX*i) +"  " + startingY);
+			g.drawLine(width+startingX,midPointY+deltaY*i, midPointX + deltaX*i, startingY);
+			
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+			
+			g.drawLine(width+startingX,midPointY-deltaY*i, midPointX - deltaX*i, startingY);
+
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+			
+			g.drawLine(startingX,midPointY+deltaY*i, midPointX + deltaX*i, height+startingY);
+
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+			
+			g.drawLine(startingX,midPointY-deltaY*i, midPointX - deltaX*i, height + startingY);
+
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+			
+			g.drawLine(width + startingX,midPointY+deltaY*i, midPointX - deltaX*i, height+startingY);
+
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+			
+			g.drawLine(width + startingX,midPointY-deltaY*i, midPointX + deltaX*i, height + startingY);
+
+			res = changeColor(colorToUse,colorphase,g);
+			colorToUse = (Color)(res[0]);
+			colorphase = (Integer)(res[1]);
+			g = (Graphics)(res[2]);
+		}
+		return new Object[]{colorToUse,g,colorphase};
+	}
+	public Object[] changeColor(Color colorToUse, int colorphase, Graphics g)
+	{
+		int pos = 7;
+		int neg = -7;
+		switch(colorphase)
+		{
+		case 1:
+			colorToUse=updateColor(colorToUse,0,pos,0);
+			if(colorToUse.getGreen() >= 255)
+				colorphase = 2;
+			break;
+		case 2:
+			colorToUse=updateColor(colorToUse,neg,0,0);
+			if(colorToUse.getRed() <= 0)
+				colorphase = 3; 
+			break;
+		case 3:
+			colorToUse=updateColor(colorToUse,0,0,pos);
+			if(colorToUse.getBlue() >= 255)
+				colorphase = 4; 
+			break;
+		case 4:
+			colorToUse=updateColor(colorToUse,0,neg,0);
+			if(colorToUse.getGreen() <= 0)
+				colorphase = 5; 
+			break;
+		case 5:
+			colorToUse=updateColor(colorToUse,pos,0,0);
+			if(colorToUse.getRed() >= 255)
+				colorphase = 6; 
+			break;
+		case 6:
+			colorToUse=updateColor(colorToUse,0,0,neg);
+			if(colorToUse.getBlue() <= 0)
+				colorphase = 1; 
+			break;
+		}
+		g.setColor(colorToUse);
+		return new Object[]{colorToUse,colorphase,g};
+	}
+	public Color updateColor(Color c, int rInc, int gInc, int bInc)
+	{
+		return new Color(bounds(0,c.getRed()+rInc,255),bounds(0,c.getGreen()+gInc,255),bounds(0,c.getBlue()+bInc,255));
+	}
+	private int bounds(int lower, int num, int upper) {
+		return Math.max(lower, Math.min(num, upper));
+	}
+	
+}
